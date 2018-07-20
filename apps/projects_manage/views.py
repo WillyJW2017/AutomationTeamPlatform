@@ -79,7 +79,8 @@ class SprintsOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mi
 
     def perform_create(self, serializer):
         project = self.request.data['sprint']['project']
-        serializer.save(project_id=project)
+        last_update_user = self.request.data['username']
+        serializer.save(project_id=project, last_update_time = datetime.now(), last_update_user=last_update_user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -142,7 +143,8 @@ class ReleasesOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, m
 
     def perform_create(self, serializer):
         project = self.request.data['release']['project']
-        serializer.save(project_id=project)
+        last_update_user = self.request.data['username']
+        serializer.save(project_id=project, last_update_time = datetime.now(), last_update_user=last_update_user)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

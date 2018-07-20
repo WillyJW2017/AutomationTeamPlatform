@@ -75,7 +75,7 @@ class Story(models.Model):
 
 class TestCases(models.Model):
     FRAMEWORK_CHOICES = (
-        ('SE', 'Selenium'), ('CU', 'Cucumber'), ('UFT', 'UFT'),
+        ('Selenium', 'Selenium'), ('Cucumber', 'Cucumber'), ('UFT', 'UFT'),
     )
     APPLICATION_CHOICES = (
         ('Web', 'Web'), ('Mobile', 'Mobile'), ('API', 'API'),
@@ -101,7 +101,7 @@ class TestCases(models.Model):
 
 class SubTestCases(models.Model):
     FRAMEWORK_CHOICES = (
-        ('SE', 'Selenium'), ('CU', 'Cucumber'), ('UFT', 'UFT'),
+        ('Selenium', 'Selenium'), ('Cucumber', 'Cucumber'), ('UFT', 'UFT'),
     )
     APPLICATION_CHOICES = (
         ('Web', 'Web'), ('Mobile', 'Mobile'), ('API', 'API'),

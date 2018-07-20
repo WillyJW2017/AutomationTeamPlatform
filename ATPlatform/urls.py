@@ -21,7 +21,7 @@ from rest_framework.routers import DefaultRouter
 from users.views import UserLoginViewSet, UserRegisterViewSet, UserUpdateInfoViewSet
 from projects_manage.views import ProjectsViewSet, SprintsViewSet, SprintsOperateViewSet, ReleasesViewSet, ReleasesOperateViewSet
 from projects_manage.views import ReleasesDeleteViewSet
-from projects_manage.test_cases_views import StoryViewSet, StoryOperateViewSet, TestCaseViewSet
+from projects_manage.test_cases_views import StoryViewSet, StoryOperateViewSet, TestCaseViewSet, TestCaseOperateViewSet
 
 router = DefaultRouter()
 
@@ -59,6 +59,8 @@ router.register(r'story/list-page', StoryViewSet, base_name='story/list-page')
 router.register(r'story/edit', StoryOperateViewSet, base_name='story/edit')
 
 router.register(r'case/list-page', TestCaseViewSet, base_name='case/list-page')
+router.register(r'case/add', TestCaseOperateViewSet, base_name='case/add')
+
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

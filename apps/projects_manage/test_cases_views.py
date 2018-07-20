@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import filters
@@ -99,6 +100,22 @@ class TestCaseOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, m
     queryset = TestCases.objects.all()
     serializer_class = TestCaseInfoSerializer
 
+    def create(self, request, *args, **kwargs):
+        project = self.request.data['testcase']['project']
+        tag = self.request.data['testcase']['tag']
+        self.request.data['testcase']['project'] = ','.join(project)
+        self.request.data['testcase']['tag'] = ','.join(tag)
+
+        serializer = self.get_serializer(data=request.data['testcase'])
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        project = self.request.data['testcase']['project']
+        last_update_user = self.request.data['username']
+        serializer.save(project_id=project, updateDate=time.strftime('%Y-%m-%d',time.localtime(time.time())), updatePerson=last_update_user)
 
 
 

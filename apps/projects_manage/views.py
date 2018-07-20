@@ -1,16 +1,16 @@
+from datetime import datetime
 from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework import filters
-from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
 from collections import OrderedDict
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Projects, Sprints
-from .serializers import ProjectSerializer, SprintSerializer, SprintInfoSerializer
-from .filters import ProjectsFilter, SprintsFilter
+from .models import Projects, Sprints, Releases
+from .serializers import ProjectSerializer, SprintSerializer, SprintInfoSerializer, ReleaseSerializer, ReleaseInfoSerializer
+from .filters import ProjectsFilter, SprintsFilter, ReleasesFilter
 
 
 # customized pagination function
@@ -89,15 +89,86 @@ class SprintsOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mi
         self.perform_update(serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
         return Response(serializer.data)
 
     def perform_update(self, serializer):
-        project = self.request.data['sprint']['project']
+        # project = self.request.data['sprint']['project']
+        last_update_user = self.request.data['username']
+        # serializer.save(project_id=project, last_update_time=datetime.now(), last_update_user=last_update_user)
+        serializer.save(last_update_time=datetime.now(), last_update_user=last_update_user)
+
+class ReleasesPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+    page_query_param = 'page'
+    max_page_size = 50
+
+    def get_paginated_response(self, data):
+        return Response(OrderedDict([
+            ('total', self.page.paginator.count),
+            ('next', self.get_next_link()),
+            ('previous', self.get_previous_link()),
+            ('releases', data)
+        ]))
+
+class ReleasesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    '''
+    Get release list --- list, filter, order
+    '''
+    queryset = Releases.objects.all().order_by('name')
+    serializer_class = ReleaseSerializer
+    pagination_class = ReleasesPagination
+
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = ReleasesFilter
+    ordering_fields = ('name', )
+
+
+class ReleasesOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    '''
+    Operate release ---- create, update, delete
+    '''
+    queryset = Releases.objects.all()
+    serializer_class = ReleaseInfoSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data['release'])
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        project = self.request.data['release']['project']
         serializer.save(project_id=project)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data['release'], partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        # project = self.request.data['release']['project']
+        last_update_user = self.request.data['username']
+        serializer.save(last_update_time = datetime.now(), last_update_user=last_update_user)
+
+
+class ReleasesDeleteViewSet(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+
+    def get_queryset(self):
+        return Releases.objects.filter(id__in=self.request.query_params['ids'])
+
+
+
 
 
 

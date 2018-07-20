@@ -19,7 +19,9 @@ from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework.routers import DefaultRouter
 from users.views import UserLoginViewSet, UserRegisterViewSet, UserUpdateInfoViewSet
-from projects_manage.views import ProjectsViewSet, SprintsViewSet, SprintsOperateViewSet
+from projects_manage.views import ProjectsViewSet, SprintsViewSet, SprintsOperateViewSet, ReleasesViewSet, ReleasesOperateViewSet
+from projects_manage.views import ReleasesDeleteViewSet
+from projects_manage.test_cases_views import StoryViewSet, StoryOperateViewSet, TestCaseViewSet
 
 router = DefaultRouter()
 
@@ -38,12 +40,25 @@ router.register(r'project/list',ProjectsViewSet, base_name='project/list')
 #configure the user update url
 router.register(r'system-user/update', UserUpdateInfoViewSet, base_name='system-user/update')
 
+#configure the sprint related(list, add, updated, delete) url
 router.register(r'sprint/list', SprintsViewSet, base_name='sprint/list')
 router.register(r'sprint/list-page', SprintsViewSet, base_name='sprint/list-page')
-
 router.register(r'sprint/add', SprintsOperateViewSet, base_name='sprint/add')
 router.register(r'sprint/delete', SprintsOperateViewSet, base_name='sprint/delete')
 router.register(r'sprint/edit', SprintsOperateViewSet, base_name='sprint/edit')
+
+
+router.register(r'release/list', ReleasesViewSet, base_name='release/list')
+router.register(r'release/list-page', ReleasesViewSet, base_name='release/list-page')
+router.register(r'release/add', ReleasesOperateViewSet, base_name='release/add')
+router.register(r'release/delete', ReleasesOperateViewSet, base_name='release/delete')
+router.register(r'release/edit', ReleasesOperateViewSet, base_name='release/edit')
+router.register(r'release/batch-delete', ReleasesDeleteViewSet, base_name='release/batch-delete')
+
+router.register(r'story/list-page', StoryViewSet, base_name='story/list-page')
+router.register(r'story/edit', StoryOperateViewSet, base_name='story/edit')
+
+router.register(r'case/list-page', TestCaseViewSet, base_name='case/list-page')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

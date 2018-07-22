@@ -58,6 +58,7 @@ class SubTestCaseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TestCaseInfoSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = TestCases
         fields = ('name', 'functionArea', 'framework', 'application', 'tag', 'description')

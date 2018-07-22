@@ -60,7 +60,8 @@ router.register(r'story/edit', StoryOperateViewSet, base_name='story/edit')
 
 router.register(r'case/list-page', TestCaseViewSet, base_name='case/list-page')
 router.register(r'case/add', TestCaseOperateViewSet, base_name='case/add')
-
+router.register(r'case/edit', TestCaseOperateViewSet, base_name='case/edit')
+router.register(r'case/delete', TestCaseOperateViewSet, base_name='case/delete')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

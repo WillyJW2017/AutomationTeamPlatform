@@ -21,55 +21,52 @@ from rest_framework.routers import DefaultRouter
 from users.views import UserLoginViewSet, UserRegisterViewSet, UserUpdateInfoViewSet
 from projects_manage.views import ProjectsViewSet, SprintsViewSet, SprintsOperateViewSet, ReleasesViewSet, ReleasesOperateViewSet
 from projects_manage.views import ReleasesDeleteViewSet
-from projects_manage.test_cases_views import StoryViewSet, StoryOperateViewSet, TestCaseViewSet, TestCaseOperateViewSet
+from projects_manage.test_cases_views import StoryViewSet, StoryOperateViewSet, TestCaseViewSet, TestCaseOperateViewSet, SubTestCaseViewSet, SubTestCaseOperateViewSet
 
 router = DefaultRouter()
 
-# configure the login url
+# configure the user related url(login, register, update)
 router.register(r'login', UserLoginViewSet, base_name='login')
-
-# configure the user register url
 router.register(r'register',UserRegisterViewSet, base_name='register')
-
-# configure the project list page url --- return all projects all information
-router.register(r'project/list-page',ProjectsViewSet, base_name='project/list-page')
-
-#configure the project list url --- return all projects name
-router.register(r'project/list',ProjectsViewSet, base_name='project/list')
-
-#configure the user update url
 router.register(r'system-user/update', UserUpdateInfoViewSet, base_name='system-user/update')
 
-#configure the sprint related(list, add, updated, delete) url
+# configure the project related (list) url
+router.register(r'project/list-page',ProjectsViewSet, base_name='project/list-page')
+router.register(r'project/list',ProjectsViewSet, base_name='project/list')
+
+#configure the sprint related(list, add, update, delete) url
 router.register(r'sprint/list', SprintsViewSet, base_name='sprint/list')
 router.register(r'sprint/list-page', SprintsViewSet, base_name='sprint/list-page')
 router.register(r'sprint/add', SprintsOperateViewSet, base_name='sprint/add')
 router.register(r'sprint/delete', SprintsOperateViewSet, base_name='sprint/delete')
 router.register(r'sprint/edit', SprintsOperateViewSet, base_name='sprint/edit')
 
-
+#configure the release related(list, add, update, delete) url
 router.register(r'release/list', ReleasesViewSet, base_name='release/list')
 router.register(r'release/list-page', ReleasesViewSet, base_name='release/list-page')
 router.register(r'release/add', ReleasesOperateViewSet, base_name='release/add')
-router.register(r'release/delete', ReleasesOperateViewSet, base_name='release/delete')
 router.register(r'release/edit', ReleasesOperateViewSet, base_name='release/edit')
+router.register(r'release/delete', ReleasesOperateViewSet, base_name='release/delete')
 router.register(r'release/batch-delete', ReleasesDeleteViewSet, base_name='release/batch-delete')
 
+#configure the story related(list, update) url
 router.register(r'story/list-page', StoryViewSet, base_name='story/list-page')
 router.register(r'story/edit', StoryOperateViewSet, base_name='story/edit')
 
+#configure the case related(list, add, update, delete) url
 router.register(r'case/list-page', TestCaseViewSet, base_name='case/list-page')
 router.register(r'case/add', TestCaseOperateViewSet, base_name='case/add')
 router.register(r'case/edit', TestCaseOperateViewSet, base_name='case/edit')
 router.register(r'case/delete', TestCaseOperateViewSet, base_name='case/delete')
+
+router.register(r'subcase/selected', SubTestCaseViewSet, base_name='subcase/selected')
+router.register(r'subcase/unselected', SubTestCaseViewSet, base_name='subcase/unselected')
+router.register(r'subcase/edit', SubTestCaseOperateViewSet, base_name='subcase/edit')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^admin/', admin.site.urls),
     url(r'docs/', include_docs_urls(title='Automation Team Platform')), # drf文档入口
-
-    # url(r'^login/', obtain_jwt_token),
-
 
 ]

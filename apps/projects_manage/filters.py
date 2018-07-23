@@ -39,3 +39,8 @@ class TestCaseFilter(filters.FilterSet):
     class Meta:
         model = TestCases
         fields = ['name']
+
+class SubTestCaseFilter(filters.FilterSet):
+    class Meta:
+        model = SubTestCases
+        fields = ['storyId', ]

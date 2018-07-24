@@ -12,7 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Story, TestCases, SubTestCases
 from .serializers import StorySerializer, StoryUpdateInfoSerializer, TestCaseSerializer, TestCaseInfoSerializer, SubTestCaseSerializer, SubTestCaseInfoSerializer, SubTestCaseEditSerializer
-from .filters import StoryFilter, TestCaseFilter, SubTestCaseFilter
+from .filters import StoryFilter, TestCaseFilter, SubTestCaseFilter, StoryReleaseFilter
 
 
 class StoryPagination(PageNumberPagination):
@@ -30,16 +30,45 @@ class StoryPagination(PageNumberPagination):
         ]))
 
 class StoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    '''
-    Get story list --- list, filter, order
-    '''
-    queryset = Story.objects.all().order_by('release')
+    # '''
+    # Get story list --- list, filter, order
+    # '''
+    # queryset = Story.objects.all().order_by('release')
     serializer_class = StorySerializer
     pagination_class = StoryPagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_class = StoryFilter
+    # filter_class = StoryFilter
     ordering_fields = ('story_id', )
+
+    def get_queryset(self):
+        filter_type = self.request.query_params.get('type')
+        filter_value = self.request.query_params.get('value')
+        if filter_type == 'release':
+            self.filter_class = StoryReleaseFilter
+        else:
+            self.filter_class = StoryFilter
+
+        result = self.release_sprint_filter(filter_type, filter_value, Story.objects.all())
+        queryset_result = Story.objects.filter(story_id__in=result)
+        return queryset_result
+
+    def release_sprint_filter(self,filter_type,filter_value,objects):
+        if filter_value is None:
+            filter_value = ''
+        if filter_type is None:
+            filter_type = ''
+
+        result = []
+        it = iter(objects)
+        for obj in it:
+            if filter_type == 'release' and obj.release == filter_value:
+                result.append(obj)
+            elif filter_type == 'sprint'and obj.sprint == filter_value:
+                result.append(obj)
+            else:
+                result.append(obj)
+        return result
 
 
 class StoryOperateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -62,8 +91,9 @@ class StoryOperateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
         return Response(serializer.data)
 
     def perform_update(self, serializer):
+        story_id = self.request.data['story']['id']
         last_update_user = self.request.data['username']
-        serializer.save(last_update_time = datetime.now(), last_update_user=last_update_user)
+        serializer.save(story_id=story_id, last_update_time = datetime.now(), last_update_user=last_update_user)
 
 
 class TestCasePagination(PageNumberPagination):
@@ -224,12 +254,38 @@ class SubTestCaseViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''
     Get Sub test case list --- list, filter, order
     '''
-    queryset = SubTestCases.objects.all().order_by('name')
+    # queryset = SubTestCases.objects.all().order_by('name')
     serializer_class = SubTestCaseSerializer
     pagination_class = SubTestCasePagination
 
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
-    filter_class = SubTestCaseFilter
+    # filter_class = SubTestCaseFilter
+
+    def get_queryset(self):
+        filter_storyId = self.request.query_params.get('storyId')
+        self.filter_class = SubTestCaseFilter
+
+        # filter_value = self.request.query_params.get('value')
+        # if filter_type == 'release':
+        #     self.filter_class = StoryReleaseFilter
+        # else:
+        #     self.filter_class = StoryFilter
+
+        result = self.sub_cases_filter(filter_storyId, SubTestCases.objects.all())
+        queryset_result = SubTestCases.objects.filter(name__in=result)
+        return queryset_result
+
+    def sub_cases_filter(self,filter_storyId, objects):
+        if filter_storyId is None:
+            filter_storyId = ''
+        result = []
+        it = iter(objects)
+        for obj in it:
+            if obj.storyId == filter_storyId:
+                result.append(obj)
+            else:
+                result.append(obj)
+        return result
 
 class SubTestCaseOperateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     '''

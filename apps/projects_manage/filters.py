@@ -13,6 +13,7 @@ class ProjectsFilter(filters.FilterSet):
 class SprintsFilter(filters.FilterSet):
     name = django_filters.CharFilter(name='name', lookup_expr='icontains')
     project = django_filters.CharFilter(name='project', lookup_expr='exact')
+
     class Meta:
         model = Sprints
         fields = ['name', 'project']
@@ -30,9 +31,16 @@ class StoryFilter(filters.FilterSet):
     id = django_filters.CharFilter(name='story_id', lookup_expr='icontains')
     summary = django_filters.CharFilter(name='summary', lookup_expr='icontains')
     project = django_filters.CharFilter(name='project', lookup_expr='exact')
+    value = django_filters.CharFilter(name='sprint', lookup_expr='exact')
     class Meta:
         model = Story
-        fields = ['sprint', 'release', 'id', 'summary', 'project']
+        fields = ['sprint', 'release', 'id', 'summary', 'project', 'value']
+
+class StoryReleaseFilter(filters.FilterSet):
+    value = django_filters.CharFilter(name='release', lookup_expr='exact')
+    class Meta:
+        model = Story
+        fields = ['value',]
 
 class TestCaseFilter(filters.FilterSet):
     name = django_filters.CharFilter(name='name', lookup_expr='icontains')
@@ -41,6 +49,8 @@ class TestCaseFilter(filters.FilterSet):
         fields = ['name']
 
 class SubTestCaseFilter(filters.FilterSet):
+    project = django_filters.CharFilter(name='project', lookup_expr='exact')
+    storyId = django_filters.CharFilter(name='sprint', lookup_expr='exact')
     class Meta:
         model = SubTestCases
-        fields = ['storyId', ]
+        fields = ['project', 'storyId']

@@ -52,6 +52,8 @@ router.register(r'release/batch-delete', ReleasesDeleteViewSet, base_name='relea
 #configure the story related(list, update) url
 router.register(r'story/list-page', StoryViewSet, base_name='story/list-page')
 router.register(r'story/edit', StoryOperateViewSet, base_name='story/edit')
+router.register(r'story/unselected',StoryViewSet, base_name='story/unselected')
+router.register(r'story/selected',StoryViewSet, base_name='story/selected')
 
 #configure the case related(list, add, update, delete) url
 router.register(r'case/list-page', TestCaseViewSet, base_name='case/list-page')

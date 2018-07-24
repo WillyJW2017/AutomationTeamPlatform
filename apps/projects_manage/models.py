@@ -54,11 +54,11 @@ class Releases(models.Model):
 
 class Story(models.Model):
     project = models.ForeignKey(Projects, verbose_name='Project Name', help_text='Project Name')
-    sprint = models.CharField(max_length=255, verbose_name='Sprint Name', help_text='Sprint Name')
-    release = models.CharField(max_length=255, verbose_name='Release Name', help_text='Release Name')
+    sprint = models.CharField(max_length=255, null=True, blank=True, verbose_name='Sprint Name', help_text='Sprint Name')
+    release = models.CharField(max_length=255, null=True, blank=True, verbose_name='Release Name', help_text='Release Name')
     story_id = models.CharField(max_length=255, verbose_name='Story ID', help_text='Story ID')
-    summary = models.CharField(max_length=255, verbose_name='Story Summary', help_text='Story Summary')
-    assignee = models.CharField(max_length=50, verbose_name='Assignee', help_text='Assignee')
+    summary = models.CharField(max_length=255, null=True, blank=True, verbose_name='Story Summary', help_text='Story Summary')
+    assignee = models.CharField(max_length=50, null=True, blank=True, verbose_name='Assignee', help_text='Assignee')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
     last_update_user = models.CharField(default=None, max_length=100, verbose_name='Last Update User',
                                         help_text='Last Update User')
@@ -86,9 +86,9 @@ class TestCases(models.Model):
     framework = models.CharField(max_length=20, choices=FRAMEWORK_CHOICES)
     application = models.CharField(max_length=20, choices=APPLICATION_CHOICES)
     tag = models.CharField(max_length=255, verbose_name='Tag', help_text='Tag')
-    description = models.CharField(max_length=500, verbose_name='Test Case Description', help_text='Test Case Description')
+    description = models.CharField(max_length=500, null=True, blank=True, verbose_name='Test Case Description', help_text='Test Case Description')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
-    updatePerson = models.CharField(max_length=50, verbose_name='Last Update User', help_text='Last Update User')
+    updatePerson = models.CharField(max_length=50, default='', verbose_name='Last Update User', help_text='Last Update User')
     updateDate = models.DateField(default=None, verbose_name='Last Update Date', help_text='Last Update Date')
 
     class Meta:
@@ -124,7 +124,7 @@ class SubTestCases(models.Model):
     application = models.CharField(max_length=20, choices=APPLICATION_CHOICES)
     tag = models.CharField(max_length=255, verbose_name='Tag', help_text='Tag')
     functionArea = models.CharField(max_length=255, verbose_name='Function Area', help_text='Function Area')
-    description = models.CharField(max_length=500, verbose_name='Test Case Description',
+    description = models.CharField(max_length=500, null=True, blank=True, verbose_name='Test Case Description',
                                    help_text='Test Case Description')
     os = models.CharField(max_length=20, choices=OS_CHOICES)
     platform = models.CharField(max_length=50, choices=PLATFORM_CHOICES)
@@ -145,6 +145,7 @@ class SubTestCases(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 

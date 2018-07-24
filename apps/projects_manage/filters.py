@@ -50,7 +50,7 @@ class TestCaseFilter(filters.FilterSet):
 
 class SubTestCaseFilter(filters.FilterSet):
     project = django_filters.CharFilter(name='project', lookup_expr='exact')
-    storyId = django_filters.CharFilter(name='sprint', lookup_expr='exact')
+    storyId = django_filters.CharFilter(name='storyId', lookup_expr='exact')
     class Meta:
         model = SubTestCases
         fields = ['project', 'storyId']

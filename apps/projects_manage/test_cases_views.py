@@ -265,14 +265,8 @@ class SubTestCaseViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         filter_storyId = self.request.query_params.get('storyId')
         self.filter_class = SubTestCaseFilter
 
-        # filter_value = self.request.query_params.get('value')
-        # if filter_type == 'release':
-        #     self.filter_class = StoryReleaseFilter
-        # else:
-        #     self.filter_class = StoryFilter
-
         result = self.sub_cases_filter(filter_storyId, SubTestCases.objects.all())
-        queryset_result = SubTestCases.objects.filter(name__in=result)
+        queryset_result = SubTestCases.objects.filter(storyId__in=result)
         return queryset_result
 
     def sub_cases_filter(self,filter_storyId, objects):
@@ -282,8 +276,6 @@ class SubTestCaseViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         it = iter(objects)
         for obj in it:
             if obj.storyId == filter_storyId:
-                result.append(obj)
-            else:
                 result.append(obj)
         return result
 

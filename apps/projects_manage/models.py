@@ -1,3 +1,5 @@
+import uuid
+
 from datetime import datetime
 from django.db import models
 
@@ -138,13 +140,14 @@ class SubTestCases(models.Model):
                                         help_text='Last Update User')
     last_update_time = models.DateTimeField(default=datetime.now, verbose_name='Last Update Time', help_text='Last Update Time')
 
+
     class Meta:
         verbose_name = 'Sub Test Case'
         verbose_name_plural = verbose_name
         unique_together = ('name', 'os', 'platform', 'country')
 
     def __str__(self):
-        return self.name
+        return self.storyId
 
 
 

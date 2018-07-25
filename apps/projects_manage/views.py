@@ -100,6 +100,22 @@ class SprintsOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, mi
         # serializer.save(project_id=project, last_update_time=datetime.now(), last_update_user=last_update_user)
         serializer.save(last_update_time=datetime.now(), last_update_user=last_update_user)
 
+    def destroy(self, request, *args, **kwargs):
+        request_url = self.request._request.path
+        if '/sprint/batch-delete/' in request_url:
+            delete_id = self.request.query_params.get('ids')
+        elif '/sprint/delete/' in request_url:
+            delete_id = self.request.query_params.get('id')
+        else:
+            delete_id = ''
+
+        if (delete_id != '') and (delete_id is not None):
+            delete_id_list = delete_id.split(',')
+            for del_id in delete_id_list:
+                queryset = Sprints.objects.filter(id__exact=del_id)
+                queryset.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
 class ReleasesPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
@@ -164,11 +180,21 @@ class ReleasesOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, m
         serializer.save(last_update_time = datetime.now(), last_update_user=last_update_user)
 
 
-class ReleasesDeleteViewSet(mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    def destroy(self, request, *args, **kwargs):
+        request_url = self.request._request.path
+        if '/release/batch-delete/' in request_url:
+            delete_id = self.request.query_params.get('ids')
+        elif '/release/delete/' in request_url:
+            delete_id = self.request.query_params.get('id')
+        else:
+            delete_id = ''
 
-    def get_queryset(self):
-        return Releases.objects.filter(id__in=self.request.query_params['ids'])
-
+        if (delete_id != '') and (delete_id is not None):
+            delete_id_list = delete_id.split(',')
+            for del_id in delete_id_list:
+                queryset = Releases.objects.filter(id__exact=del_id)
+                queryset.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 

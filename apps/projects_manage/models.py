@@ -1,9 +1,6 @@
-import uuid
-
 from datetime import datetime
 from django.db import models
 
-# Create your models here.
 
 class Projects(models.Model):
     name = models.CharField(max_length=255, primary_key=True, verbose_name='Project Name', help_text='Project Name')
@@ -131,7 +128,6 @@ class SubTestCases(models.Model):
     os = models.CharField(max_length=20, choices=OS_CHOICES)
     platform = models.CharField(max_length=50, choices=PLATFORM_CHOICES)
     country = models.CharField(max_length=20, choices=COUNTRY_CHOICES)
-    # storyId = models.ForeignKey(Story, verbose_name='story id')
     storyId = models.CharField(max_length=255, null=True, blank=True, verbose_name='Story ID', help_text='Story ID')
     status = models.CharField(default='Todo', max_length=50, verbose_name='Test case Status', help_text='Test case Status')
     result = models.CharField(default='',null=True,blank=True, max_length=50, verbose_name='Execution Result', help_text='Execution Result')

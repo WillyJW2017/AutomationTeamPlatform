@@ -1,4 +1,5 @@
 import time
+import json
 from datetime import datetime
 
 from rest_framework import mixins
@@ -70,6 +71,28 @@ class StoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
                 result.append(obj)
         return result
 
+class StoryListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = StorySerializer
+    pagination_class = StoryPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+
+    def get_queryset(self):
+        filters_str = self.request.query_params.get('filters')
+        filters_dict = json.loads(filters_str)
+        if len(filters_dict) == 0:
+            return Story.objects.all()
+        else:
+            queryset = Story.objects.all()
+            for filter_name in filters_dict:
+                if filter_name == 'id':
+                    queryset = queryset.filter(story_id__icontains=filters_dict[filter_name])
+                elif filter_name == 'summary':
+                    queryset = queryset.filter(summary__icontains=filters_dict[filter_name])
+                elif filter_name == 'sprint':
+                    queryset = queryset.filter(sprint__icontains=filters_dict[filter_name])
+                elif filter_name == 'release':
+                    queryset = queryset.filter(release__icontains=filters_dict[filter_name])
+            return queryset
 
 class StoryOperateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     '''

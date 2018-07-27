@@ -21,6 +21,7 @@ from rest_framework.routers import DefaultRouter
 from users.views import UserLoginViewSet, UserRegisterViewSet, UserUpdateInfoViewSet
 from projects_manage.views import ProjectsViewSet, SprintsViewSet, SprintsOperateViewSet, ReleasesViewSet, ReleasesOperateViewSet
 from projects_manage.test_cases_views import StoryViewSet, StoryListViewSet, StoryOperateViewSet, TestCaseViewSet, TestCaseOperateViewSet, SubTestCaseViewSet, SubTestCaseOperateViewSet
+from test_suite.views import TestSuiteViewSet, TestSuiteOperateViewSet, TestSuiteResultViewSet
 
 router = DefaultRouter()
 
@@ -33,7 +34,7 @@ router.register(r'system-user/update', UserUpdateInfoViewSet, base_name='system-
 router.register(r'project/list-page',ProjectsViewSet, base_name='project/list-page')
 router.register(r'project/list',ProjectsViewSet, base_name='project/list')
 
-#configure the sprint related(list, add, update, delete) url
+#configure the sprint related(list, add, update, delete/batch-delete) url
 router.register(r'sprint/list', SprintsViewSet, base_name='sprint/list')
 router.register(r'sprint/list-page', SprintsViewSet, base_name='sprint/list-page')
 router.register(r'sprint/add', SprintsOperateViewSet, base_name='sprint/add')
@@ -41,7 +42,7 @@ router.register(r'sprint/delete', SprintsOperateViewSet, base_name='sprint/delet
 router.register(r'sprint/edit', SprintsOperateViewSet, base_name='sprint/edit')
 router.register(r'sprint/batch-delete', SprintsOperateViewSet, base_name='sprint/batch-delete')
 
-#configure the release related(list, add, update, delete) url
+#configure the release related(list, add, update, delete/batch-delete) url
 router.register(r'release/list', ReleasesViewSet, base_name='release/list')
 router.register(r'release/list-page', ReleasesViewSet, base_name='release/list-page')
 router.register(r'release/add', ReleasesOperateViewSet, base_name='release/add')
@@ -49,7 +50,7 @@ router.register(r'release/edit', ReleasesOperateViewSet, base_name='release/edit
 router.register(r'release/delete', ReleasesOperateViewSet, base_name='release/delete')
 router.register(r'release/batch-delete', ReleasesOperateViewSet, base_name='release/batch-delete')
 
-#configure the story related(list, update) url
+#configure the story related(list, update, selected/unselected) url
 router.register(r'story/list-page', StoryListViewSet, base_name='story/list-page')
 router.register(r'story/edit', StoryOperateViewSet, base_name='story/edit')
 router.register(r'story/unselected',StoryViewSet, base_name='story/unselected')
@@ -60,10 +61,18 @@ router.register(r'case/list-page', TestCaseViewSet, base_name='case/list-page')
 router.register(r'case/add', TestCaseOperateViewSet, base_name='case/add')
 router.register(r'case/edit', TestCaseOperateViewSet, base_name='case/edit')
 router.register(r'case/delete', TestCaseOperateViewSet, base_name='case/delete')
+router.register(r'case/batch-delete', TestCaseOperateViewSet, base_name='case/batch-delete')
 
+#configure the sub case related(update, selected/unselected) url
 router.register(r'subcase/selected', SubTestCaseViewSet, base_name='subcase/selected')
 router.register(r'subcase/unselected', SubTestCaseViewSet, base_name='subcase/unselected')
 router.register(r'subcase/edit', SubTestCaseOperateViewSet, base_name='subcase/edit')
+
+router.register(r'suite/list-page', TestSuiteViewSet, base_name='suite/list-page')
+router.register(r'suite/add',TestSuiteOperateViewSet, base_name='suite/add')
+router.register(r'test-result/list-page', TestSuiteResultViewSet, base_name='suite/list-page')
+
+
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

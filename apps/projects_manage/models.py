@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from django.db import models
 
@@ -22,8 +23,8 @@ class Sprints(models.Model):
     startDate = models.DateField(verbose_name='Start Date', help_text='Start Date')
     endDate = models.DateField(verbose_name='End Date', help_text='End Date')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
-    last_update_user = models.CharField(default=None, max_length=100, verbose_name='Last Update User', help_text='Last Update User')
-    last_update_time = models.DateTimeField(default=None, verbose_name='Last Update Time', help_text='Last Update Time')
+    last_update_user = models.CharField(default='', null=True, blank=True, max_length=100, verbose_name='Last Update User', help_text='Last Update User')
+    last_update_time = models.DateTimeField(default=datetime.now, verbose_name='Last Update Time', help_text='Last Update Time')
 
     class Meta:
         verbose_name = 'SprintName'
@@ -39,9 +40,9 @@ class Releases(models.Model):
     startDate = models.DateField(verbose_name='Start Date', help_text='Start Date')
     endDate = models.DateField(verbose_name='End Date', help_text='End Date')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
-    last_update_user = models.CharField(default=None, max_length=100, verbose_name='Last Update User',
+    last_update_user = models.CharField(default='', null=True, blank=True, max_length=100, verbose_name='Last Update User',
                                         help_text='Last Update User')
-    last_update_time = models.DateTimeField(default=None, verbose_name='Last Update Time', help_text='Last Update Time')
+    last_update_time = models.DateTimeField(default=datetime.now, verbose_name='Last Update Time', help_text='Last Update Time')
 
     class Meta:
         verbose_name = 'ReleaseName'
@@ -59,9 +60,9 @@ class Story(models.Model):
     summary = models.CharField(max_length=255, null=True, blank=True, verbose_name='Story Summary', help_text='Story Summary')
     assignee = models.CharField(max_length=50, null=True, blank=True, verbose_name='Assignee', help_text='Assignee')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
-    last_update_user = models.CharField(default=None, max_length=100, verbose_name='Last Update User',
+    last_update_user = models.CharField(default='', null=True, blank=True, max_length=100, verbose_name='Last Update User',
                                         help_text='Last Update User')
-    last_update_time = models.DateTimeField(default=None, verbose_name='Last Update Time', help_text='Last Update Time')
+    last_update_time = models.DateTimeField(default=datetime.now, verbose_name='Last Update Time', help_text='Last Update Time')
 
     class Meta:
         verbose_name = 'StoryID'
@@ -87,8 +88,8 @@ class TestCases(models.Model):
     tag = models.CharField(max_length=255, verbose_name='Tag', help_text='Tag')
     description = models.CharField(max_length=500, null=True, blank=True, verbose_name='Test Case Description', help_text='Test Case Description')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
-    updatePerson = models.CharField(max_length=50, default='', verbose_name='Last Update User', help_text='Last Update User')
-    updateDate = models.DateField(default=None, verbose_name='Last Update Date', help_text='Last Update Date')
+    updatePerson = models.CharField(max_length=50, default='', null=True, blank=True, verbose_name='Last Update User', help_text='Last Update User')
+    updateDate = models.DateField(default=time.strftime('%Y-%m-%d',time.localtime(time.time())), verbose_name='Last Update Date', help_text='Last Update Date')
 
     class Meta:
         verbose_name = 'Test Case Name'
@@ -132,7 +133,7 @@ class SubTestCases(models.Model):
     status = models.CharField(default='Todo', max_length=50, verbose_name='Test case Status', help_text='Test case Status')
     result = models.CharField(default='',null=True,blank=True, max_length=50, verbose_name='Execution Result', help_text='Execution Result')
     created_time = models.DateTimeField(default=datetime.now, verbose_name='Created Time', help_text='Created Time')
-    last_update_user = models.CharField(default='', max_length=100, verbose_name='Last Update User',
+    last_update_user = models.CharField(default='', null=True, blank=True, max_length=100, verbose_name='Last Update User',
                                         help_text='Last Update User')
     last_update_time = models.DateTimeField(default=datetime.now, verbose_name='Last Update Time', help_text='Last Update Time')
 

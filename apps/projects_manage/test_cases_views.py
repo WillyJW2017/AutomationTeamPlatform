@@ -67,8 +67,7 @@ class StoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
                 result.append(obj)
             elif filter_type == 'sprint'and obj.sprint == filter_value:
                 result.append(obj)
-            else:
-                result.append(obj)
+
         return result
 
 class StoryListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -251,6 +250,22 @@ class TestCaseOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, m
 
             sub_case.save()
         return test_case
+
+    def destroy(self, request, *args, **kwargs):
+        request_url = self.request._request.path
+        if '/case/batch-delete/' in request_url:
+            delete_id = self.request.query_params.get('ids')
+        elif '/case/delete/' in request_url:
+            delete_id = self.request.query_params.get('id')
+        else:
+            delete_id = ''
+
+        if (delete_id != '') and (delete_id is not None):
+            delete_id_list = delete_id.split(',')
+            for del_id in delete_id_list:
+                queryset = TestCases.objects.filter(id__exact=del_id)
+                queryset.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SubTestCasePagination(PageNumberPagination):
     page_size = 50

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'projects_manage.apps.ProjectsManageConfig',
+    'test_suite.apps.TestSuiteConfig',
     'django_filters',
     'corsheaders',
     'rest_framework',

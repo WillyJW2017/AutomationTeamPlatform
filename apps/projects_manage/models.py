@@ -117,8 +117,8 @@ class SubTestCases(models.Model):
     PLATFORM_CHOICES = (
         ('iphone', 'iphone'), ('ipad', 'ipad'), ('androidPhone', 'androidPhone'), ('androidTablet', 'androidTablet'),
     )
-    name = models.ForeignKey(TestCases, verbose_name='Test Case Name', help_text='Test Case Name')
-    sub = models.ForeignKey(TestCases, related_name='subcases', null=True, blank=True)
+    case_name = models.ForeignKey(TestCases, verbose_name='Test Case Name', help_text='Test Case Name')
+    test_case = models.ForeignKey(TestCases, related_name='subcases', null=True, blank=True)
     project = models.ForeignKey(Projects, verbose_name='Project Name', help_text='Project Name')
     framework = models.CharField(max_length=20, choices=FRAMEWORK_CHOICES)
     application = models.CharField(max_length=20, choices=APPLICATION_CHOICES)
@@ -141,7 +141,7 @@ class SubTestCases(models.Model):
     class Meta:
         verbose_name = 'Sub Test Case'
         verbose_name_plural = verbose_name
-        unique_together = ('name', 'os', 'platform', 'country')
+        unique_together = ('case_name', 'os', 'platform', 'country')
 
     def __str__(self):
         return self.storyId

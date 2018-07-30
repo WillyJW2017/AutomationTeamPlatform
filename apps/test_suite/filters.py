@@ -10,7 +10,7 @@ class TestSuiteFilter(filters.FilterSet):
         fields = ['name']
 
 class TestSuiteResultFilter(filters.FilterSet):
-    name = django_filters.CharFilter(name='suiteId', lookup_expr='exact')
+    suiteId = django_filters.CharFilter(name='suiteId', lookup_expr='exact')
     class Meta:
         model = TestSuiteResult
-        fields = ['name']
+        fields = ['suiteId']

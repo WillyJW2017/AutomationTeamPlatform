@@ -54,7 +54,7 @@ class TestCaseSerializer(serializers.ModelSerializer):
 
 class SubTestCaseSerializer(serializers.ModelSerializer):
     #CharField(source='<本model中的外键>.<外键指向的model的相应属性>')
-    name = serializers.CharField(source='name.name')
+    name = serializers.CharField(source='case_name.name')
     class Meta:
         model = SubTestCases
         fields = '__all__'

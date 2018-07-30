@@ -9,6 +9,7 @@ class TestSuiteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SubTestCaseResultSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='case_name.case_name')
     class Meta:
         model = SubTestCaseResult
         fields = '__all__'

@@ -20,6 +20,10 @@ class TestSuitePagination(PageNumberPagination):
     max_page_size = 50
 
     def get_paginated_response(self, data):
+        for list_data in data:
+            list_data['cases'] = list_data['cases'].split(',')
+            list_data['config'] = json.loads(list_data['config'])
+
         return Response(OrderedDict([
             ('total', self.page.paginator.count),
             ('next', self.get_next_link()),
@@ -51,6 +55,22 @@ class TestSuiteOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    def destroy(self, request, *args, **kwargs):
+        request_url = self.request._request.path
+        if '/suite/batch-delete/' in request_url:
+            delete_id = self.request.query_params.get('ids')
+        elif '/suite/delete/' in request_url:
+            delete_id = self.request.query_params.get('id')
+        else:
+            delete_id = ''
+
+        if (delete_id != '') and (delete_id is not None):
+            delete_id_list = delete_id.split(',')
+            for del_id in delete_id_list:
+                queryset = TestSuite.objects.filter(id__exact=del_id)
+                queryset.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
 class TestSuiteResultPagination(PageNumberPagination):
     page_size = 20
     page_size_query_param = 'page_size'
@@ -58,6 +78,8 @@ class TestSuiteResultPagination(PageNumberPagination):
     max_page_size = 50
 
     def get_paginated_response(self, data):
+        for list_data in data:
+            list_data['config'] = json.loads(list_data['config'])
         return Response(OrderedDict([
             ('total', self.page.paginator.count),
             ('next', self.get_next_link()),

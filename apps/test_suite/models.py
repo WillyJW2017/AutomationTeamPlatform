@@ -14,7 +14,7 @@ class TestSuite(models.Model):
         ('Web', 'Web'), ('Mobile', 'Mobile'), ('API', 'API'),
         ('Siebel', 'Siebel'), ('C/S', 'Client/Server'),
     )
-    name = models.CharField(max_length=255, primary_key=True, verbose_name='Test Suite Name', help_text='Test Suite Name')
+    name = models.CharField(max_length=255, verbose_name='Test Suite Name', help_text='Test Suite Name')
     project = models.ForeignKey(Projects, verbose_name='Project Name', help_text='Project Name')
     application = models.CharField(max_length=20, choices=APPLICATION_CHOICES)
     framework = models.CharField(max_length=20, choices=FRAMEWORK_CHOICES)
@@ -28,6 +28,7 @@ class TestSuite(models.Model):
     class Meta:
         verbose_name = 'Test Suite'
         verbose_name_plural = verbose_name
+        unique_together = ('name', 'project')
 
     def __str__(self):
         return self.name
@@ -65,8 +66,8 @@ class SubTestCaseResult(models.Model):
     PLATFORM_CHOICES = (
         ('iphone', 'iphone'), ('ipad', 'ipad'), ('androidPhone', 'androidPhone'), ('androidTablet', 'androidTablet'),
     )
-    name = models.ForeignKey(SubTestCases, verbose_name='Sub Case Name', help_text='Sub Case Name')
-    detail = models.ForeignKey(TestSuiteResult, related_name='details', null=True, blank=True)
+    case_name = models.ForeignKey(SubTestCases, verbose_name='Sub Case Name', help_text='Sub Case Name')
+    test_suit = models.ForeignKey(TestSuiteResult, related_name='details', null=True, blank=True)
     project = models.ForeignKey(Projects, verbose_name='Project Name', help_text='Project Name')
     framework = models.CharField(max_length=20, choices=FRAMEWORK_CHOICES)
     application = models.CharField(max_length=20, choices=APPLICATION_CHOICES)
@@ -92,9 +93,9 @@ class SubTestCaseResult(models.Model):
     class Meta:
         verbose_name = 'Sub Test Case Result'
         verbose_name_plural = verbose_name
-        unique_together = ('name', 'os', 'platform', 'country')
+        # unique_together = ('name', 'os', 'platform', 'country')
 
     def __str__(self):
-        return self.name
+        return self.name.name
 
 

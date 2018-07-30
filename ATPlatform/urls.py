@@ -64,15 +64,17 @@ router.register(r'case/delete', TestCaseOperateViewSet, base_name='case/delete')
 router.register(r'case/batch-delete', TestCaseOperateViewSet, base_name='case/batch-delete')
 
 #configure the sub case related(update, selected/unselected) url
+router.register(r'subcase/list', SubTestCaseViewSet, base_name='subcase/list')
 router.register(r'subcase/selected', SubTestCaseViewSet, base_name='subcase/selected')
 router.register(r'subcase/unselected', SubTestCaseViewSet, base_name='subcase/unselected')
 router.register(r'subcase/edit', SubTestCaseOperateViewSet, base_name='subcase/edit')
 
 router.register(r'suite/list-page', TestSuiteViewSet, base_name='suite/list-page')
 router.register(r'suite/add',TestSuiteOperateViewSet, base_name='suite/add')
+router.register(r'suite/delete', TestSuiteOperateViewSet, base_name='suite/delete')
+router.register(r'suite/batch-delete', TestSuiteOperateViewSet, base_name='suite/batch-delete')
+
 router.register(r'test-result/list-page', TestSuiteResultViewSet, base_name='suite/list-page')
-
-
 
 urlpatterns = [
     # path('admin/', admin.site.urls),

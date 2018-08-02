@@ -71,6 +71,7 @@ router.register(r'subcase/edit', SubTestCaseOperateViewSet, base_name='subcase/e
 
 router.register(r'suite/list-page', TestSuiteViewSet, base_name='suite/list-page')
 router.register(r'suite/add',TestSuiteOperateViewSet, base_name='suite/add')
+router.register(r'suite/edit', TestSuiteOperateViewSet, base_name='suite/edit')
 router.register(r'suite/delete', TestSuiteOperateViewSet, base_name='suite/delete')
 router.register(r'suite/batch-delete', TestSuiteOperateViewSet, base_name='suite/batch-delete')
 

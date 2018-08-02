@@ -90,7 +90,7 @@ class StoryListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
                 elif filter_name == 'sprint':
                     queryset = queryset.filter(sprint__icontains=filters_dict[filter_name])
                 elif filter_name == 'release':
-                    queryset = queryset.filter(release__icontains=filters_dict[filter_name])
+                    queryset = queryset.filter(release__exact=filters_dict[filter_name])
             return queryset
 
 class StoryOperateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
@@ -175,8 +175,8 @@ class TestCaseOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, m
 
         for sub_data in sub_cases_data:
             sub_case = SubTestCases()
-            sub_case.name = test_case
-            sub_case.sub = test_case
+            sub_case.case_name = test_case
+            sub_case.test_case = test_case
             sub_case.project = test_case.project
             sub_case.framework = test_case.framework
             sub_case.tag = test_case.tag

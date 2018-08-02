@@ -101,7 +101,20 @@ DATABASES = {
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB;' }
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'sqlserver_ado',
+#         'NAME': 'TestAutomation',
+#         'USER': 'TestAutomation',
+#         'PASSWORD': 'Auto123#',
+#         'HOST': 'VQWD1175\SQL8DEV',
+#         'OPTIONS': {
+#             'provider': 'SQLNCLI11',
+#             'extra_params': 'DataTypeCompatibility=80'
+#         }
+#         # 'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB;' }
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

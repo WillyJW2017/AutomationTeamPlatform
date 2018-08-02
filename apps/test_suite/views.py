@@ -1,4 +1,5 @@
 import json
+import time
 from datetime import datetime
 from rest_framework import mixins
 from rest_framework import viewsets
@@ -54,6 +55,14 @@ class TestSuiteOperateViewSet(mixins.CreateModelMixin, mixins.UpdateModelMixin, 
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_update(self, serializer):
+        cases = ','.join(self.request.data['suite']['cases'])
+        config = json.dumps(self.request.data['suite']['config'])
+        last_update_user = self.request.data['username']
+        serializer.save(cases=cases, config=config, updatePerson=last_update_user, updateDate=time.strftime('%Y-%m-%d',time.localtime(time.time())))
+
+
 
     def destroy(self, request, *args, **kwargs):
         request_url = self.request._request.path
